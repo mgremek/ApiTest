@@ -1,33 +1,29 @@
+using Api_Cats.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api_Cats.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    public class CatController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
+        private readonly ILogger<CatController> _logger;
+        private readonly ICat _cat;
 
-        private readonly ILogger<WeatherForecastController> _logger;
-
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public CatController(ILogger<CatController> logger, ICat cat)
         {
             _logger = logger;
+            _cat = cat;
         }
 
-        [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecast> Get()
-        {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
-        }
+        //[HttpGet(Name = "GetCat")]
+        //public IEnumerable<Cat> Get()
+        //{
+        //    return null;
+        //}
+
+        [HttpGet(Name = "GetCat")]
+        public string Get() => _cat.Sound();       
+
     }
 }
