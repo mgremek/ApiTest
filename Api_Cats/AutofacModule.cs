@@ -1,6 +1,6 @@
 ﻿using Autofac.Core;
 using Autofac;
-using Api_Cats.Models;
+using Api_Cats.Entities;
 
 namespace Api_Cats
 {
@@ -8,7 +8,7 @@ namespace Api_Cats
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<Cat>().As<ICat>();
+            //builder.RegisterType<Cat>().As<ICat>();
 
             //// Other Lifetime
             //// Transient
