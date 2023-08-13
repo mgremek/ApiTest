@@ -8,7 +8,5 @@ namespace Api_Cats.Entities
         public int Id { get; set; }
         public string Name { get; set; }
         public string Color { get; set; }
-        public int HumanId { get; set; }
-        public virtual Human Human { get; set; }
     }
 }

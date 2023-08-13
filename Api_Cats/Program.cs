@@ -1,5 +1,6 @@
 using Api_Cats;
 using Api_Cats.Entities;
+using Api_Cats.Services;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
@@ -16,13 +17,21 @@ builder.Services.AddDbContext<CatsDbContext>(options => options.UseSqlServer(bui
 
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
+builder.Services.AddScoped<ICatsService, CatsService>();
+
 // Register services directly with Autofac here.
 // Don't call builder.Populate(), that happens in AutofacServiceProviderFactory.
 builder.Host.ConfigureContainer<ContainerBuilder>(
    builder => builder.RegisterModule(new AutofacModule()));
 
+builder.Services.AddScoped<CatsSeeder>();
 
 var app = builder.Build();
+
+
+var scope = app.Services.CreateScope();
+var restaurantSeeder = scope.ServiceProvider.GetRequiredService<CatsSeeder>();
+restaurantSeeder.Seed();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

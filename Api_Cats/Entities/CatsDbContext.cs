@@ -11,7 +11,6 @@ namespace Api_Cats.Entities
             
         }
         
-        public DbSet<Human> Human { get; set; }
         public DbSet<Cat> Cats { get; set; }
 
     }
