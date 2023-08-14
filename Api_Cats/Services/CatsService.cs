@@ -1,4 +1,5 @@
 ﻿using Api_Cats.Entities;
+
 namespace Api_Cats.Services
 {
     public interface ICatsService
