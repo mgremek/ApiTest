@@ -1,6 +1,4 @@
 ﻿using Api_Cats.Entities;
-using System.Security.Cryptography;
-
 namespace Api_Cats.Services
 {
     public interface ICatsService
@@ -9,6 +7,7 @@ namespace Api_Cats.Services
         Cat Get(int id);
         void Delete(int id);
         int Create(Cat cat);
+        void Update(int id, Cat cat);
     }
 
     public class CatsService : ICatsService
@@ -26,23 +25,37 @@ namespace Api_Cats.Services
 
         public void Delete(int id)
         {
-            var human = _catsDbContext.Cats.FirstOrDefault(x => x.Id == id);
+            var cat = _catsDbContext.Cats.FirstOrDefault(x => x.Id == id);
 
-            if (human is not null)
-                _catsDbContext.Cats.Remove(human);
+            if (cat is not null)
+            {
+                _catsDbContext.Cats.Remove(cat);
+                _catsDbContext.SaveChanges(); 
+            }
 
             return;
         }
 
-
         public int Create(Cat cat)
         {
             _catsDbContext.Cats.Add(cat);
+            _catsDbContext.SaveChanges();
+
             return cat.Id;
         }
-        public void Modify()
-        {
 
+        public void Update(int id, Cat cat)
+        {
+            var c = _catsDbContext.Cats.FirstOrDefault(x => x.Id == id);
+
+            if (c is not null)
+            {
+                _catsDbContext.Cats.Remove(c);
+                _catsDbContext.Cats.Add(cat);
+                _catsDbContext.SaveChanges();
+            }
+
+            return;
         }
     }
 }
