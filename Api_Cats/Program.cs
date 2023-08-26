@@ -1,4 +1,5 @@
 using Api_Cats;
+using Api_Cats.Api;
 using Api_Cats.Entities;
 using Api_Cats.Middleware;
 using Api_Cats.Services;
@@ -26,6 +27,7 @@ builder.Services.AddDbContext<CatsDbContext>(options => options.UseSqlServer(bui
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
 builder.Services.AddScoped<ICatsService, CatsService>();
+builder.Services.AddScoped<ICatsServiceQL, CatsServiceGraphQL>();  
 
 // Register services directly with Autofac here.
 // Don't call builder.Populate(), that happens in AutofacServiceProviderFactory.
@@ -34,6 +36,10 @@ builder.Host.ConfigureContainer<ContainerBuilder>(
 
 builder.Services.AddScoped<CatsSeeder>();
 builder.Services.AddScoped<RequestLoggingMiddleware>();
+
+builder.Services
+    .AddGraphQLServer()
+    .AddQueryType<Query>();
 
 var app = builder.Build();
 
@@ -55,5 +61,7 @@ app.UseMiddleware<RequestLoggingMiddleware>();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapGraphQL();
 
 app.Run();
