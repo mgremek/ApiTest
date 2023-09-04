@@ -1,11 +1,19 @@
 using Api_Cats;
 using Api_Cats.Entities;
+using Api_Cats.Middleware;
 using Api_Cats.Services;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using NLog.Web;
+
 
 var builder = WebApplication.CreateBuilder(args);
+
+// NLog: Setup NLog for Dependency injection
+builder.Logging.ClearProviders();
+builder.Logging.SetMinimumLevel(LogLevel.Trace);
+builder.Host.UseNLog();
 
 // Add services to the container.
 
@@ -25,6 +33,7 @@ builder.Host.ConfigureContainer<ContainerBuilder>(
    builder => builder.RegisterModule(new AutofacModule()));
 
 builder.Services.AddScoped<CatsSeeder>();
+builder.Services.AddScoped<RequestLoggingMiddleware>();
 
 var app = builder.Build();
 
@@ -41,6 +50,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseMiddleware<RequestLoggingMiddleware>();
 
 app.UseAuthorization();
 
