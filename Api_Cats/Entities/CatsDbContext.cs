@@ -12,6 +12,7 @@ namespace Api_Cats.Entities
         }
         
         public DbSet<Cat> Cats { get; set; }
+        public DbSet<Product> Products { get; set; }       
 
     }
 }
