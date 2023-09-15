@@ -5,9 +5,11 @@ using Api_Cats.Entities.Validators;
 using Api_Cats.Middleware;
 using Api_Cats.Services;
 using Autofac;
+using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using NLog.Web;
 
@@ -35,6 +37,13 @@ builder.Services.AddScoped<ICatsService, CatsService>();
 builder.Services.AddScoped<ICatsQlService, CatsQLService>();
 
 builder.Services.AddScoped<IValidator<Product>, ProductValidator>();
+
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(
+        options => {
+            options.SignIn.RequireConfirmedAccount = false;
+        }
+        )
+    .AddEntityFrameworkStores<CatsDbContext>();
 
 // Register services directly with Autofac here.
 // Don't call builder.Populate(), that happens in AutofacServiceProviderFactory.
@@ -66,6 +75,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseMiddleware<RequestLoggingMiddleware>();
 
+app.UseRouting();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

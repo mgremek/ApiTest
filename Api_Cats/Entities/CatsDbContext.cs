@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using NuGet.DependencyResolver;
-using System.Security.Cryptography.X509Certificates;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Api_Cats.Entities
 {
-    public class CatsDbContext : DbContext
+    public class CatsDbContext : IdentityDbContext<IdentityUser, IdentityRole, string>
     {
         public CatsDbContext(DbContextOptions<CatsDbContext> options) : base(options)
         {
