@@ -6,7 +6,7 @@ namespace Api_Cats.Api
 {
     public class Query
     {
-        public async Task<IEnumerable<Cat>> GetCatsAsync([Service] ICatsServiceQL catsService)
+        public async Task<IEnumerable<Cat>> GetCatsAsync([Service] ICatsQlService catsService)
         {
             return await catsService.GetCatsAsync();
         }
