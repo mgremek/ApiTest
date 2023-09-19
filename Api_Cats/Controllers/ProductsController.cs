@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Api_Cats.Entities;
 using Microsoft.AspNetCore.Authorization;
+using MediatR;
+using Api_Cats.Functions.Commands;
 
 namespace Api_Cats.Controllers
 {
@@ -15,10 +17,12 @@ namespace Api_Cats.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly CatsDbContext _context;
+        private readonly IMediator _mediator;
 
-        public ProductsController(CatsDbContext context)
+        public ProductsController(CatsDbContext context, IMediator mediator)
         {
             _context = context;
+            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
         // GET: api/Products
@@ -87,17 +91,10 @@ namespace Api_Cats.Controllers
         // POST: api/Products
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<Product>> PostProduct(Product product)
+        //[Authorize(Roles = "Admin")]
+        public async Task<ActionResult<Product>> PostProduct(CreateProductCommand command)
         {
-          if (_context.Products == null)
-          {
-              return Problem("Entity set 'CatsDbContext.Products'  is null.");
-          }
-            _context.Products.Add(product);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetProduct", new { id = product.Id }, product);
+            return Ok(await _mediator.Send(command));
         }
 
         // DELETE: api/Products/5
