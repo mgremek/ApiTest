@@ -105,13 +105,15 @@ namespace Api_Cats.Controllers
 
             if (!await _roleManager.RoleExistsAsync(UserRoles.Admin))
                 await _roleManager.CreateAsync(new IdentityRole(UserRoles.Admin));
-            
+
+            if (!await _roleManager.RoleExistsAsync(UserRoles.Guest))
+                await _roleManager.CreateAsync(new IdentityRole(UserRoles.Guest));
 
             if (await _roleManager.RoleExistsAsync(UserRoles.Admin))
             {
                 await _userManager.AddToRoleAsync(user, UserRoles.Admin);
             }
-            if (await _roleManager.RoleExistsAsync(UserRoles.Admin))
+            if (await _roleManager.RoleExistsAsync(UserRoles.Guest))
             {
                 await _userManager.AddToRoleAsync(user, UserRoles.Guest);
             }

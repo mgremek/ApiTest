@@ -41,18 +41,19 @@ builder.Services.AddScoped<ICatsQlService, CatsQLService>();
 
 builder.Services.AddScoped<IValidator<Product>, ProductValidator>();
 
-//builder.Services.AddIdentity<IdentityUser, IdentityRole>(
-//        options => {
-//            options.SignIn.RequireConfirmedAccount = false;
-//            options.Password.RequiredLength = 3;
-//            options.Password.RequiredUniqueChars = 0;
-//            options.Password.RequireLowercase = false;
-//            options.Password.RequireUppercase = false;
-//            options.Password.RequireDigit = false;
-//            options.Password.RequireNonAlphanumeric = false;
-//        }
-//        )
-//    .AddEntityFrameworkStores<CatsDbContext>();
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(
+        options =>
+        {
+            options.SignIn.RequireConfirmedAccount = false;
+            options.Password.RequiredLength = 3;
+            options.Password.RequiredUniqueChars = 0;
+            options.Password.RequireLowercase = false;
+            options.Password.RequireUppercase = false;
+            options.Password.RequireDigit = false;
+            options.Password.RequireNonAlphanumeric = false;
+        }
+        )
+    .AddEntityFrameworkStores<CatsDbContext>();
 
 var authenticationSettings = new AuthenticationSettings();
 
