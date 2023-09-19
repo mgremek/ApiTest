@@ -44,9 +44,13 @@ namespace Api_Cats.Controllers
                 SecurityStamp = Guid.NewGuid().ToString(),
                 UserName = registerUserDTO.Email
             };
+
             var result = await _userManager.CreateAsync(user, registerUserDTO.Password);
             if (!result.Succeeded)
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = $"User creation failed! \n{result.Errors}" });
+
+            if (!await _roleManager.RoleExistsAsync(UserRoles.Guest))
+                await _roleManager.CreateAsync(new IdentityRole(UserRoles.Guest));
 
             return Ok(new Response { Status = "Success", Message = "User created successfully!" });
         }
@@ -80,6 +84,7 @@ namespace Api_Cats.Controllers
             }
             return Unauthorized();
         }
+
         [HttpPost]
         [Route("register-admin")]
         public async Task<IActionResult> RegisterAdmin([FromBody] RegisterUserDTO registerUserDTO)
@@ -100,8 +105,7 @@ namespace Api_Cats.Controllers
 
             if (!await _roleManager.RoleExistsAsync(UserRoles.Admin))
                 await _roleManager.CreateAsync(new IdentityRole(UserRoles.Admin));
-            if (!await _roleManager.RoleExistsAsync(UserRoles.Guest))
-                await _roleManager.CreateAsync(new IdentityRole(UserRoles.Guest));
+            
 
             if (await _roleManager.RoleExistsAsync(UserRoles.Admin))
             {
