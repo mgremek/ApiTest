@@ -22,7 +22,7 @@ namespace Api_Cats.Controllers
         public ActionResult<IEnumerable<Cat>> Get() => Ok(_service.GetAll());
 
         [HttpGet]
-        [Route("/{id}")]
+        [Route("{id}")]
         public ActionResult<Cat> Get([FromRoute]int id)
         {
             var cat = _service.Get(id);
@@ -33,7 +33,7 @@ namespace Api_Cats.Controllers
         }
 
         [HttpDelete]
-        [Route("/{id}")]
+        [Route("{id}")]
         public ActionResult Delete([FromRoute]int id)
         {
             _service.Delete(id);
@@ -44,7 +44,7 @@ namespace Api_Cats.Controllers
         public ActionResult Create([FromBody]Cat cat) => Created($".api/cat/{_service.Create(cat)}", null);
 
         [HttpPut]
-        [Route("/{id}")]
+        [Route("{id}")]
         public ActionResult Update([FromRoute]int id, [FromBody]Cat cat)
         {
             _service.Update(id, cat);
